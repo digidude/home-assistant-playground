@@ -1,4 +1,4 @@
-AutoMan Readme
+# AutoMan Readme
 
 This is the readme file for the Automan project
 
@@ -7,17 +7,19 @@ This is the readme file for the Automan project
 * Wire it up to your physical devices (logical configuration comes later)
 
 Now the fun part begins....
+
 * Creating a logical configuration
-* 
 
 Topics for later
-* More than one location (I wish I had a vacation house)
-* 
 
+* More than one location (I wish I had a vacation house)
 
 Idea from google developer codelab
-- Introduction
-- Setup your xxx environment
-- Download start stuff
-- add stuff
-- congratulations
+
+* Introduction
+* Setup your xxx environment
+* Download start stuff
+* add stuff
+* congratulations
+
+Update test from VC Code
