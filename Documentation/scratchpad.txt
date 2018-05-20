@@ -1,0 +1,159 @@
+
+Step 1 - Creating the install media
+
+    Enable SSH on first boot
+        Create an empty file name in root folder
+        $ touch /Volumes/boot/ssh
+
+    Enable Wifi on initial boot
+        Create wpa_supplicant.conf file and save to root folder
+        (see wpa_supplicant.conf file in documentation directory)
+
+Send it! I use Etcher when I'm lazy (most of the time)
+
+Should appear on the network as: raspberrypi
+
+    After a bunch of minutes try:
+ 
+    ping raspberrypi.local <-- depending on your network setup. YMMV. You can find it by IP address...blah blah blah
+     
+    $ ssh pi@raspberrypi.local
+    (accept the ssh key)
+    pwd: raspberry
+    bingo! you're in. Nice.
+
+
+Now you have to fix it up a bit.
+
+Messing with the Wifi - if you have to
+    /etc/network/interfaces
+    sudo service networking reload
+
+Change the root password
+    passwd
+
+Update it before doing anything else
+    sudo apt-get update
+    sudo apt-get dist-upgrade
+    sudo apt-get upgrade
+    (Should you change the source location for the distro files? You don't have to)
+
+User the editor of your choice.... or install the one you prefer. I'm not giving editor tutorials! 
+DO NOT do this if you don't already know how or don't want to learn vim. BTW...there is an awesome VIM tutorial in the form of an adventure game. My daughter learned VIM when she was about 10 and has never forgotten it. It has served her (and me) well to learn to be pretty good with it.
+    sudo apt-get install vim
+
+You can customize and personalize your bash shell...but that's a different discussion.
+
+Rename YOUR PI. For the rest of this conversation, mine is now called 'Automan'
+    /etc/hostname
+    /etc/hosts
+    log out and log back in for the setting to take effect.
+
+(is there a better way than to have to reboot for this to take effect?)
+
+Localize your PI using raspi-config
+    sudo raspi-config
+    Localisation Options
+    - Change Locales -- en_US.UTF-8 UTF-8 (alternative sudo dpkg-reconfigure locale)
+    - CHange timezone -- (alternative sudo dpkg-reconfigure tzdata)
+    - Change keyboard layout (alternative sudo dpkg-reconfigure keyboard-configuration) I'm doing this from a Mac, so it reall matters, otherwise a lot of keys don't work right.
+
+Who should the user be?
+    Change from pi to something else
+    Install automan or homeassistant as user?
+    What groups need to be created? Save these steps to as that particular change is being made. Keep it generic righ up until it isn't
+    What's the deal with the 'root' user on rasperian anyway?
+
+
+
+* Installing Software
+
+DOCKER
+    /boot/config.txt
+    Add this line 
+    # added for docker
+    gpu_mem=16
+
+    Follow these instructions:
+
+    https://blog.alexellis.io/getting-started-with-docker-on-raspberry-pi/
+
+    sudo /etc/init.d/docker start
+
+
+Installing  portainer
+    https://blog.hypriot.com/post/new-docker-ui-portainer/
+    docker run --restart=always -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+
+    Test it out
+    http://automan.local:9000/ (Bam!)
+
+    Or this way seems pretty good too.... [todo] pick one
+    docker volume create portainer_data
+    docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+Who should the user be?
+sudo usermod -aG docker pi [todo] this should be 'homeassistant' or something. pi as a user should go away
+
+    
+SAMBA
+    What new users should be installed for Samba? What workgroups and memberships?
+
+    https://howtoraspberrypi.com/create-a-nas-with-your-raspberry-pi-and-samba/
+
+    Can samba be loaded as a docker service? Would it even make sense?
+        run sudo docker run -it --name samba -p 139:139 -p 445:445 -p 137:137/udp -p 138:138/udp -v /data:/mount -d dperson/samba:arm -n
+        sudo docker run -it -p 139:139 -p 445:445 -d dperson/samba
+
+    Regular Samba install for Raspberry Pi
+        
+
+Node Red 
+    http://ivyco.blogspot.com/2015/03/docker-awesomeness.html
+    docker run -it -p 1880:1880 --rm --privileged -v /home/pi/.node-red:/root/.node-red nieleyde/rpi-nodered
+
+
+# Install Home Automation tools 
+
+
+
+/your config files should go in /etc/homeassistant/
+or put it in the user home directory under .homeassistant??  Why would you do that?
+
+docker run -d --name="home-assistant" -v /usr/share/homeassistant -v /etc/localtime:/etc/localtime:ro --net=host homeassistant/raspberrypi3-homeassistant:latest
+
+
+    /etc/init/docker.conf
+
+    docker run -it --rm -v /opt/docker/home-assistant/config:/config -v /etc/localtime:/etc/localtime:ro homeassistant/raspberrypi3-homeassistant hass -c /config --script check_config
+
+Wire up Hass up to Node-red
+    https://diyfuturism.com/index.php/2017/11/26/the-open-source-smart-home-getting-started-with-home-assistant-node-red/
+
+Reading:
+https://nodered.org/docs/writing-functions
+https://diyfuturism.com/index.php/2018/01/18/going-further-with-home-automations-in-node-red/
+
+
+https://flows.nodered.org/node/node-red-contrib-home-assistant
+    npm install node-red-contrib-home-assistant 
+
+
+Adding Zwave / Zigbee
+
+Using the Nortek USB stick
+The Zibbee support may be problematic...
+https://community.home-assistant.io/t/husbzb-1-what-i-have-learned-abouto-this-dongle-so-far-in-terms-of-z-wave-and-zigbee-features/41732
+
+
+
+Update configuration.yaml
+# Adding the Nortek USB Zwave / Zigbee stick
+# Zwave
+zwave:
+  usb_path: /dev/ttyUSB0
+
+# Zigbee -- HUSBZB-1
+zha:
+  usb_path: /dev/ttyUSB2
+  database_path: zigbee.db

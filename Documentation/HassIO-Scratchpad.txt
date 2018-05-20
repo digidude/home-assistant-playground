@@ -1,0 +1,26 @@
+Download HassIO Build
+
+- burn it
+- fix up the wifi / ethernet settings
+- launch it
+
+Configuration
+- Add SSH
+    - - Removing previous keys (on a mac - vim ~/.shh)
+    - Add your password or keys
+    - Login as root@hassio.local
+    - Bam...now..you are root here. Not always a good idea
+
+Adding Samba
+- running fast a lose, no password, no named users
+
+
+Adding Node-Red
+Add the repository:
+https://github.com/notoriousbdg/hassio-addons
+Hit install and take a break
+
+- Add home-assistant to the palett
+- Add timer
+
+Add Node Red to the HassIO UI
