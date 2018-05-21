@@ -24,3 +24,7 @@ Hit install and take a break
 - Add timer
 
 Add Node Red to the HassIO UI
+
+
+{ "data": {"entity_id": "light.kitchen" ,"brightness_pct": {{payload}} } }
+

@@ -1,9 +1,11 @@
 # AutoMan Readme
 
-This is the readme file for the Automan project
+This is the readme file for the "Automan Project"
 
 * Start by setting up your Automan server
-* Install and configure the Home Assistant software
+* * Install and configure the Home Assistant software
+* * * Scratchpad notes for HassIO
+* * * Scratchpad notes for Home Assistant (raspian)
 * Wire it up to your physical devices (logical configuration comes later)
 
 Now the fun part begins....
