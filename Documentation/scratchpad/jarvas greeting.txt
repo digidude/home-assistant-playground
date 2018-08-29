@@ -1,0 +1,22 @@
+https://philhawthorne.com/j-a-r-v-i-s-inspired-announcementgreeting-for-home-assistant/
+
+https://philhawthorne.com/homeautomation/
+
+
+
+  "entity_id": "media_player.living_room_mini",
+media_player
+
+data:
+entity_id: media_player.living_room_mini
+media_content_id: /local/audio/decompressing.mp3
+media_content_type: audio/mp4
+
+
+
+"entity_id" : "media_player.living_room_mini",
+"message":"Hello World"
+
+
+  "media_content_id" : "/local/audio/decompressing.mp3",
+  "media_content_type" : "audio/mp4"

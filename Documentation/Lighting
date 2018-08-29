@@ -1,0 +1,359 @@
+# 
+# VALUE TEMPLATE HACKS
+# 
+
+- alias: AUTO ON (MOTION) Downstairs Bathroom Light
+  trigger:
+    platform: state
+    entity_id: sensor.aeotec_zw100_multisensor_6_burglar_24_10
+    from: '0'
+    to: '8'
+  action:
+    service: scene.turn_on
+    data_template:
+      entity_id: >
+        {% set hour=states("sensor.time").split(':')[0] | int %}
+        {%- if hour >= 19 or hour < 6  -%}
+          scene.downstairs_bathroom_late_night
+        {%- elif hour >= 6 or hour <9  -%}
+          scene.downstairs_bathroom_early_morning
+        {%- else -%}
+          scene.downstairs_bathroom_mid_day
+        {%- endif %}
+
+
+
+service: light.turn_on
+      data_template:
+        entity_id: "light.{{ states('input_select.my-my-entity-id') }}"
+        brightness: 100
+
+
+
+"data": "{
+    "brightness_pct" : 80,     
+    "transition" : 0 
+    }",
+
+data: 
+    brightness_pct : 80
+    color_name: white
+    transition : 0
+
+
+- alias: AUTO ON (MOTION) Downstairs Bathroom Light
+  trigger:
+    platform: state
+    entity_id: sensor.aeotec_zw100_multisensor_6_burglar_24_10
+    from: '0'
+    to: '8'
+  action:
+    service: scene.turn_on
+    data_template:
+      entity_id: >
+        {% set hour=states("sensor.time").split(':')[0] | int %}
+        {%- if hour >= 19 or hour < 6  -%}
+          scene.downstairs_bathroom_late_night
+        {%- elif hour >= 6 or hour <9  -%}
+          scene.downstairs_bathroom_early_morning
+        {%- else -%}
+          scene.downstairs_bathroom_mid_day
+        {%- endif %}
+
+ value_template: >-
+          {% if is_state('input_boolean.circadian_lighing', 'true') %}
+            {% if ('input_select.house_mode', 'morning') %}
+              off
+            {% else %}
+              on
+            {% endif %}
+          {% else %}
+            off
+          {% endif %}
+
+          input_boolean.circadian_lighing
+
+          ('input_select.house_mode', 'daytime')
+
+# --- 
+# DATA TEMPLATE HACKS
+# ---
+
+
+data_template:
+      brightness: >
+      {% if now().hour > 20 %}100
+      {% elif now().hour < 5 %}50
+      {% elif now().hour < 8 %}100
+      {% else %}200
+      {% endif %}
+
+data_template:
+      brightness: >
+      {% if is_state("input_select.house_mode", "Dusk") %}100
+      {% elif is_state("input_select.house_mode", "Evening") %}80
+      {% elif is_state("input_select.house_mode", "Bedtime") %}50
+      {% else %}15
+      {% endif %}
+
+  data_template:
+          brightness: >
+            {% if is_state("input_select.house_mode", "Dusk") %}100
+            {% elif is_state("input_select.house_mode", "Evening") %}80
+            {% elif is_state("input_select.house_mode", "Bedtime") %}50
+            {% else %}15
+            {% endif %}
+
+
+
+
+  - data:
+      entity_id: light.dining_room
+      brightness_pct: 10
+      color_name: red
+      kelvin: 2200
+
+
+service: light.turn_on
+      data_template:
+        entity_id: "light.{{ states('input_select.my-my-entity-id') }}"
+        brightness: 100
+
+
+{% set light_name = "kitchen_strip"%}
+
+{% set my_test_json = {
+  "brightness_pct": 25,
+  "color": "red"
+} %}
+
+{% if states("light." + light_name) =="on" %}
+Brightness: {{ state_attr("light." + light_name, "brightness")}}
+{% else %}
+OFF
+{% endif %}
+
+
+data_template: 
+  hue_relax: 
+    "{{ states('input_select.thermostat_mode') }}"
+
+# OKAY...this works!
+
+{% if is_state("input_select.house_mode", "Dusk") -%}
+Dusk
+  {% set nightpath_profile_json = {
+    "brightness_pct": 15,
+    "color_name" : "red"
+  } %}
+
+{%- elif is_state("input_select.house_mode", "Evening") -%}
+Evening Time
+{%- elif is_state("input_select.house_mode", "Bedtime") -%}
+Bedtime
+{%- elif is_state("input_select.house_mode", "Nighttime") -%}
+Night Time
+{% else %}
+HOUSE MODE ERROR
+{%- endif -%}
+
+{{ nightpath_profile_json.color_name }}
+{{ nightpath_profile_json.brightness_pct }}
+
+
+# ------------------------------------------------------------
+
+platform: template
+lights:
+  kitchen:
+    friendly_name: "Kitchen Lights"
+    value_template: >-
+      {% if is_state('light.hallway_panel_1', 'on') and is_state('light.hallway_panel_2', 'on') %}
+        on
+      {% else %}
+        off
+      {% endif %}
+    turn_on:
+      service: light.turn_on
+      entity_id:
+        - light.hallway_panel_1
+        - light.hallway_panel_2
+    turn_off:
+      service: light.turn_off
+      entity_id:
+        - light.hallway_panel_1
+        - light.hallway_panel_2
+    level_template: >-
+      {% if is_state('light.hallway', 'on') %}
+        {{ (states.light.hallway_panel_1.attributes.brightness)|int }}
+      {% else %}
+        0
+      {% endif %}
+    set_level:
+      service: light.turn_on
+      data_template:
+        entity_id:
+          - light.hallway_panel_1
+          - light.hallway_panel_2
+        brightness: "{{ brightness }}"
+        transition: "{{ transition }}"
+
+
+#
+kitchen_lights_on:
+  alias: Kitchen lights - On
+  sequence:
+  - data:
+      brightness_pct: >
+        {% if is_state("input_select.house_mode", "Daytime") %}100
+        {% else %}15
+        {% endif %}
+      color_name: >
+        {% if is_state("input_select.house_mode", "Daytime") %}white
+        {% else %}red
+        {% endif %}
+      entity_id: light.kitchen
+    service: light.turn_on
+
+
+MORE THOUGHTS
+
+motion_light:
+  trigger:
+
+  alias: Dining Room - Nightpath
+  sequence:
+  - data:
+      brightness_pct: 15
+      entity_id: light.dining_room
+      color_name: red
+    service: light.turn_on
+
+
+    input_boolean.kitchen_state
+  
+kitchen_light_automation:
+  trigger:
+    - entity_id: input_boolean.kitchen_state
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition[]:
+  action:
+    - data:
+      brightness_pct: 80
+      entity_id: light.kitchen
+      color_name: white
+    service: light.turn_on
+
+# --------------------------------------------------
+# Trigger lights
+# --------------------------------------------------
+# - id: '232332432234324'
+#   alias: kitchen auto light
+#   trigger:
+#   - entity_id: input_boolean.kitchen_state
+#     from: 'off'
+#     platform: state
+#     to: 'on'
+#   condition[]:
+#   action:
+#     data:
+#       brightness_pct: 80
+#       entity_id: light.kitchen
+#       color_name: white
+#     service: light.turn_on
+
+
+
+
+  action:
+    service_template: >
+      notify.{{ trigger.topic.split('/')[-1] }}
+    data_template:
+      message: '{{ trigger.payload }}'
+
+- data:
+      brightness_pct: 70
+      color_name: red
+
+
+- data:
+      brightness_pct: 70
+      color_name: green
+
+
+bright: { "brightness_pct": 80, ... }
+dim: { "brightness_pct": 15, ... }
+
+
+
+# -----------------------------------------------------------------
+
+input_number:
+  home_mode_day_brightness_value:
+#    initial: 100
+    min: 0
+    max: 100
+    step: 1
+  home_mode_day_color_temp_value:
+#    initial: 154
+    min: 154
+    max: 426
+    step: 1
+  home_mode_day_transition_value:
+#    initial: 10
+    min: 1
+    max: 90
+    step: 1
+
+automation:
+....
+action:
+  service: light.turn_on
+  data_template:
+    entity_id: light.fibaro_dimmer_bathroom_1
+    color_temp: >-
+      {% if is_state("input_select.home_mode", "Dag") %}
+      {{ states('input_number.home_mode_day_color_temp_value') | int }}
+      {% elif is_state("input_select.home_mode", "Kveld") %}
+      {{ states('input_number.home_mode_evening_color_temp_value') | int }}
+      {% elif is_state("input_select.home_mode", "Natt") %}
+      {{ states('input_number.home_mode_night_color_temp_value') | int }}
+      {% else %}
+        180
+      {% endif %}
+
+input_number:
+  home_mode_day_brightness_value:
+#    initial: 100
+    min: 0
+    max: 100
+    step: 1
+  home_mode_day_color_temp_value:
+#    initial: 154
+    min: 154
+    max: 426
+    step: 1
+  home_mode_day_transition_value:
+#    initial: 10
+    min: 1
+    max: 90
+    step: 1
+
+input_number:
+  home_mode_day_brightness_value:
+    min: 0
+    max: 100
+    step: 1
+
+ {{ states('input_number.home_mode_day_brightness') | int }}
+
+
+home_mode_day_brightness_value: 100
+home_mode_day_color_temp_value: 154
+home_mode_day_transition_value: 10
+
+home_mode_night_brightness_value: 50
+home_mode_night_color_temp_value: 154
+home_mode_night_transition_value: 10

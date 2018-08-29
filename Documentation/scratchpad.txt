@@ -60,11 +60,9 @@ Localize your PI using raspi-config
 
 Who should the user be?
     Change from pi to something else
-    Install automan or homeassistant as user?
-    What groups need to be created? Save these steps to as that particular change is being made. Keep it generic righ up until it isn't
+    Create automan or homeassistant as user?
+    What groups should be created? Save these steps to as that particular change is being made. Keep it generic righ up until it isn't
     What's the deal with the 'root' user on rasperian anyway?
-
-
 
 * Installing Software
 
@@ -117,7 +115,7 @@ Node Red
 
 
 
-/your config files should go in /etc/homeassistant/
+* your config files should go in /etc/homeassistant/
 or put it in the user home directory under .homeassistant??  Why would you do that?
 
 docker run -d --name="home-assistant" -v /usr/share/homeassistant -v /etc/localtime:/etc/localtime:ro --net=host homeassistant/raspberrypi3-homeassistant:latest
@@ -148,12 +146,18 @@ https://community.home-assistant.io/t/husbzb-1-what-i-have-learned-abouto-this-d
 
 
 Update configuration.yaml
+# --- Zwave and Zigbee ---
 # Adding the Nortek USB Zwave / Zigbee stick
+# check which USB ports were assisgned (ls /dev/ttyUSB* should help)
 # Zwave
 zwave:
   usb_path: /dev/ttyUSB0
 
 # Zigbee -- HUSBZB-1
 zha:
-  usb_path: /dev/ttyUSB2
+  usb_path: /dev/ttyUSB1
   database_path: zigbee.db
+
+
+  Docker Hints
+  https://community.home-assistant.io/t/my-docker-stack/43548

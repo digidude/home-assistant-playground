@@ -21,10 +21,45 @@ https://github.com/notoriousbdg/hassio-addons
 Hit install and take a break
 
 - Add home-assistant to the palett
-- Add timer
+- Add timers
 
 Add Node Red to the HassIO UI
+
+Node Red Add-ons
+- node-red-contrib-stoptimer
 
 
 { "data": {"entity_id": "light.kitchen" ,"brightness_pct": {{payload}} } }
 
+Update configuration.yaml
+# --- Zwave and Zigbee ---
+# Adding the Nortek USB Zwave / Zigbee stick
+# check which USB ports were assisgned (ls /dev/ttyUSB* should help)
+# Zwave
+zwave:
+  usb_path: /dev/ttyUSB0
+
+# Zigbee -- HUSBZB-1
+zha:
+  usb_path: /dev/ttyUSB1
+  database_path: zigbee.db
+
+
+  There are some good ideas here:
+  https://github.com/geekofweek/homeassistant
+  (images of setting up rooms)
+
+  # 
+  input_select:
+    house_mode:
+        name: House mode
+        options:
+            - Morning
+            - Day
+            - Evening
+            - Night
+    presence:
+        name: Presence
+        options:
+            - Home
+            - Away

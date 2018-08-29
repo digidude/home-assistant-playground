@@ -25,3 +25,7 @@ Idea from google developer codelab
 * congratulations
 
 Update test from VC Code
+
+
+Tinkers Config
+https://github.com/DubhAd/Home-AssistantConfig
