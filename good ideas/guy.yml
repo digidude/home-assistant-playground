@@ -1,0 +1,359 @@
+### CONFIG FILE
+###
+### 
+
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 47.340129
+  longitude: -122.266119
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 120
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/Los_Angeles
+  # Customization file
+  customize: !include customize.yaml
+  # Enabled Packages
+  packages: !include_dir_named packages
+
+# Recorder, keeps the last 15 days worth of data in the home-assistant_v2.db
+recorder:
+  purge_keep_days: 15
+  purge_interval: 1
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+  javascript_version: latest
+
+# Enables configuration UI
+config:
+
+# Z-wave
+zwave:
+  usb_path: /dev/ttyACM0
+  network_key: "0x20, 0x39, 0x99, 0xC0, 0x9B, 0xBC, 0x4C, 0xF5, 0x0B, 0x72, 0x14, 0x26, 0x47, 0x87, 0xE7, 0x85"
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# Weather prediction
+sensor:
+  - platform: wunderground
+    name: Weather
+    api_key: !secret wunderground_api
+    monitored_conditions:
+      - temp_f
+      - weather
+      - precip_today_in
+      - precip_1d_in
+#      - feelslike_string
+  - platform: raincloud
+
+# Text to speech
+tts:
+  - platform: google
+  
+# Belkin WeMo
+wemo:
+  static:
+    - 192.168.1.17
+    - 192.168.1.21
+
+# Asus WRT for Presence Detection
+device_tracker:
+  - platform: asuswrt
+    host: 192.168.1.1
+    username: !secret router_user
+    password: !secret router_pass
+    interval_seconds: 60
+    consider_home: 0:15
+    track_new_devices: yes
+  - platform: bluetooth_tracker
+    consider_home: 180
+    track_new_devices: yes
+
+  
+# Google
+google:
+  client_id: !secret google_client
+  client_secret: !secret google_secret
+  track_new_calendar: True
+
+# Ring Hub
+ring:
+  username: !secret def_email
+  password: !secret ring_pass
+
+# Ring Sensor
+binary_sensor:
+  - platform: ring
+    monitored_conditions:
+      - ding
+      - motion
+  - platform: raincloud
+
+# Honeywell Thermostat
+climate 1:
+  - platform: honeywell
+    username: !secret def_email
+    password: !secret honeywell_pass
+    region: 'us'
+    scan_interval: 600
+
+# Lutron Caseta
+lutron_caseta_pro:
+    bridges:
+      - host: 192.168.1.22
+        mac: A0:F6:FD:2E:14:F3
+    
+# Chamberlain Garage Door
+cover:
+  - platform: myq
+    username: !secret def_email
+    password: !secret myq_pass
+    type: chamberlain
+
+# Notifiers (V4K & Discord)
+notify:
+  - platform: kodi
+    host: 192.168.1.60
+    name: Vero4k
+    username: !secret osmc_user
+    password: !secret osmc_pass
+  - name: Discord
+    platform: discord
+    token: NDM0Nzc4MzgzMjI2NzY1MzEz.Dbe1xA.8NkT_fKfC0WMQZUSA6jFK-kEHn8
+
+# Raincloud Watering system
+raincloud:
+  username: !secret def_email
+  password: !secret raincloud_pass
+
+# Switches
+switch:
+  - platform: raincloud
+  - platform: mqtt
+    name: "PondOutlet1"
+    command_topic: "cmnd/sonoffPond/power1"
+    state_topic: "stat/sonoffPond/POWER1"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "PondOutlet2"
+    command_topic: "cmnd/sonoffPond/power2"
+    state_topic: "stat/sonoffPond/POWER2"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+
+# Inputs
+input_number:
+  moisture_estimate:
+    name: Moisture Estimate
+    min: 0.00
+    max: 15.00
+    step: 0.01
+    unit_of_measurement: inches
+    icon: mdi:cup-water
+
+group: !include groups.yaml
+automation: !include_dir_merge_list automation/
+#automation: !include automations.yaml
+script: !include scripts.yaml
+
+#
+# PACKAGE FILE
+# TAGS: 
+
+homeassistant:
+  customize:
+    ## Lower Hallway Remotes
+    sensor.downstairs_hallway_kitchen:
+      script: 'lutron_lower_hallway' # This acts as a variable for this sensor. We need all 'downstairs' sensors to use this as the base to build on.
+
+    sensor.downstairs_hallway_garage:
+      script: 'lutron_lower_hallway'
+
+    sensor.downstairs_hallway_master_bedroom:
+      script: 'lutron_lower_hallway'
+
+    ## Upper Hallway Remotes
+    sensor.upstairs_hallway_pico:
+      script: 'lutron_upper_hallway'
+
+    sensor.upstairs_lorem_ipsum:
+      script: 'lutron_upper_hallway'
+
+automation:
+  - alias: "Lutron Remote Button Pressed"
+    trigger:
+      - platform: state
+        entity_id:
+          # Lower Hallway Remotes
+          - sensor.downstairs_hallway_kitchen
+          - sensor.downstairs_hallway_garage
+          - sensor.downstairs_hallway_master_bedroom
+
+          # Upper Hallway Remotes
+          - sensor.upstairs_hallway_pico
+          # - sensor.upstairs_lorem_ipsum
+
+          # Be sure to add new remote entities here
+    condition:
+      - condition: template
+        value_template: "{{ trigger.to_state.state|int > 0 }}" # :)
+    action:
+      - service_template: >-
+          {#- Be sure to quote all keys/indexes of button_names -#}
+          {%- set button_names = {
+            '1': 'on',
+            '2': 'fav',
+            '4': 'off',
+            '8': 'up',
+            '16': 'down',
+          } -%}
+          {%- set state = trigger.to_state.state -%}
+          {%- set button = button_names[state|string]|default(state) -%}
+          {%- set script = trigger.to_state.attributes.script -%}
+
+          {%- if '{BUTTON}' in script -%}
+            {%- set script = script|replace('{BUTTON}', button) -%}
+          {%- elif states.script[script] is none -%}
+            {%- set script = script ~ '_' ~ button -%}
+          {%- endif -%}
+          script.{{ script }}
+
+script:
+  ## Lower Hallway Remotes
+  lutron_lower_hallway_up:
+    alias: "Remote - Lower Hallway - Up"
+    sequence:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: group.entry_hall
+          brightness: "{{ [255, state_attr('light.cat_hallway', 'brightness')|int(0) + 51]|min }}"
+
+  lutron_lower_hallway_down:
+    alias: "Remote - Lower Hallway - Down"
+    sequence:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: group.entry_hall
+          brightness: "{{ [0, state_attr('light.cat_hallway', 'brightness')|int(0) - 51]|max }}"
+
+  lutron_lower_hallway_on:
+    alias: "Remote - Lower Hallway - On"
+    sequence:
+      - service: light.turn_on
+        entity_id: light.downstairs_hallway_main_lights
+      - service: light.turn_on
+        entity_id: group.entry_hall
+        data:
+          transition: 3
+
+  lutron_lower_hallway_off:
+    alias: "Remote - Lower Hallway - Off"
+    sequence:
+      - service: light.turn_off
+        entity_id: group.entry_hall
+        data:
+          transition: 5
+
+  lutron_lower_hallway_fav:
+    alias: "Remote - Lower Hallway - Fav"
+    sequence:
+      - service: light.turn_on
+        entity_id: light.downstairs_hallway_main_lights
+      - service: light.turn_on
+        data:
+          entity_id: group.entry_hall
+          brightness: 254
+          color_temp: 367
+        #  rgb_color: [255, 206, 121]
+
+  # ... add more lower_hallway scripts
+
+  ## Upper Hallway Remotes (You Don't Have There Yet)
+  lutron_upper_hallway_up:
+    alias: "Remote - Lower Hallway - Up"
+    sequence:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: group.upstairs_hall
+          brightness: "{{ [255, state_attr('light.hue_color_lamp_1', 'brightness')|int(0) + 51]|min }}"
+
+  lutron_upper_hallway_down:
+    alias: "Remote - Lower Hallway - Down"
+    sequence:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: group.upstairs_hall
+          brightness: "{{ [0, state_attr('light.hue_color_lamp_1', 'brightness')|int(0) - 51]|max }}"
+
+  lutron_upper_hallway_on:
+    alias: "Remote - Lower Hallway - On"
+    sequence:
+      - service: light.turn_on
+        entity_id: light.upstairs_hallway_main_lights
+      - service: light.turn_on
+        entity_id: group.upstairs_hall
+        data:
+          transition: 3
+
+  lutron_upper_hallway_off:
+    alias: "Remote - Lower Hallway - Off"
+    sequence:
+      - service: light.turn_off
+        entity_id: group.upstairs_hall
+        data:
+          transition: 5
+
+  lutron_upper_hallway_fav:
+    alias: "Remote - Lower Hallway - Fav"
+    sequence:
+      - service: light.turn_on
+        entity_id: light.upstairs_hallway_main_lights
+      - service: light.turn_on
+        data:
+          entity_id: group.upstairs_hall
+          brightness: 254
+          color_temp: 366
+          rgb_color: 255,255,255
+
+  # ... add more upper_hallway scripts

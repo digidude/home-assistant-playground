@@ -21,14 +21,10 @@
           scene.downstairs_bathroom_mid_day
         {%- endif %}
 
-
-
 service: light.turn_on
       data_template:
         entity_id: "light.{{ states('input_select.my-my-entity-id') }}"
         brightness: 100
-
-
 
 "data": "{
     "brightness_pct" : 80,     
@@ -39,7 +35,6 @@ data:
     brightness_pct : 80
     color_name: white
     transition : 0
-
 
 - alias: AUTO ON (MOTION) Downstairs Bathroom Light
   trigger:
@@ -264,9 +259,6 @@ kitchen_light_automation:
 #       color_name: white
 #     service: light.turn_on
 
-
-
-
   action:
     service_template: >
       notify.{{ trigger.topic.split('/')[-1] }}
@@ -348,7 +340,6 @@ input_number:
     step: 1
 
  {{ states('input_number.home_mode_day_brightness') | int }}
-
 
 home_mode_day_brightness_value: 100
 home_mode_day_color_temp_value: 154

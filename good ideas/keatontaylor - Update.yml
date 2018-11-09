@@ -1,0 +1,49 @@
+ automation:
+  - alias : Update last_motion_triggered from motion sensor last triggered.
+
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_2
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_3
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_4
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_5
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_6
+      to: 'on'
+
+    action:
+      - service: light.turn_on
+        data_template:
+          entity_id: "group.{{ trigger.to_state.attributes.friendly_name | replace(' Motion', '') | lower }}_motion_on"
+          transition: 0
+
+  - alias : Turn off lights based on last montion triggered
+
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_2
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_3
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_4
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_5
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_6
+      to: 'off'
+
+    condition:
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: 'off'
+
+    action:
+      - service: light.turn_off
+        data_template:
+          entity_id: >
+              {% set roomname = trigger.to_state.attributes.friendly_name | replace(' Motion', '') | lower %}
+              {% set lightgroup = 'group.' + roomname + '_motion_off'  %}
+              {% if is_state('group.motion_sensors', 'off') and is_state(test3, 'on') %}
+                  {{ lightgroup }}
+              {% else %}
+                  input_boolean.dummy
+              {% endif %}

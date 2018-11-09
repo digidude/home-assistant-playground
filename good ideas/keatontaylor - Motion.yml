@@ -1,0 +1,194 @@
+################################################################
+## Packages / Motion Lights
+################################################################
+
+# @todo Handle non-realistic transitions gracefully
+
+################################################
+## Customize
+################################################
+
+homeassistant:
+  customize:
+    packages.motion_lights: &customize
+      package: 'motion_lights'
+
+    binary_sensor.aeotec_zw100_multisensor_6_sensor_3_0:
+      <<: *customize
+      friendly_name: Closet Motion
+
+    binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_4_0:
+      <<: *customize
+      friendly_name: Bathroom Motion
+
+    binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_5_0:
+      <<: *customize
+      friendly_name: Bedroom Motion
+
+    binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_6_0:
+      <<: *customize
+      friendly_name: Livingroom Motion
+
+    binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_7_0:
+      <<: *customize
+      friendly_name: Kitchen Motion
+
+    input_select.last_motion_triggered:
+      <<: *customize
+      friendly_name: 'Last Motion Triggered In'
+
+    group.livingroom_motion_off:
+      <<: *customize
+      hidden: true
+    group.closet_motion_off:
+      <<: *customize
+      hidden: true
+    group.bedroom_motion_off:
+      <<: *customize
+      hidden: true
+    group.bathroom_motion_off:
+      <<: *customize
+      hidden: true
+    group.kitchen_motion_off:
+      <<: *customize
+      hidden: true
+
+    group.livingroom_motion_on:
+      <<: *customize
+      hidden: true
+    group.closet_motion_on:
+      <<: *customize
+      hidden: true
+    group.bedroom_motion_on:
+      <<: *customize
+      hidden: true
+    group.bathroom_motion_on:
+      <<: *customize
+      hidden: true
+    group.kitchen_motion_on:
+      <<: *customize
+      hidden: true
+
+    input_boolean.dummy:
+      <<: *customize
+      hidden: true
+
+   
+################################################
+## Groups
+################################################
+
+group:
+
+  livingroom_motion_on:
+    entities:
+      - group.livingroom_lights
+  bedroom_motion_on:
+    entities:
+      - light.bedroom_lamp
+  bathroom_motion_on:
+    entities:
+      - group.bathroom_lights
+  closet_motion_on:
+    entities:
+      - light.closet_light
+  kitchen_motion_on:
+    entities:
+      - group.kitchen_lights
+
+  kitchen_motion_off:
+    entities:
+      - group.livingroom_lights
+      - group.bedroom_lights
+      - group.bathroom_lights
+      - light.closet_light
+  livingroom_motion_off:
+    entities:
+      - group.kitchen_lights
+      - group.bedroom_lights
+      - group.bathroom_lights
+      - light.closet_light
+  bathroom_motion_off:
+    entities:
+      - group.livingroom_lights 
+      - group.bedroom_lights
+      - group.kitchen_lights
+      - light.closet_light
+  bedroom_motion_off:
+    entities:
+      - group.livingroom_lights 
+      - group.bathroom_lights
+      - group.kitchen_lights
+      - light.closet_light
+  closet_motion_off:
+    entities:
+      - group.livingroom_lights 
+      - group.bathroom_lights
+      - group.kitchen_lights     
+
+################################################
+## Input Boolean
+################################################
+
+input_boolean:
+  dummy:
+    name: dummy input for automations
+
+################################################
+## Input Select
+################################################
+
+input_select:
+  last_motion_triggered:
+    initial: Livingroom
+    options:
+      - Livingroom
+      - Kitchen
+      - Bedroom
+      - Bathroom
+      - Closet
+
+################################################
+## Automation
+################################################
+
+automation:
+
+  - alias : Update last_motion_triggered from motion sensor last triggered.
+
+    trigger:
+      platform: state
+      entity_id: 
+        - binary_sensor.aeotec_zw100_multisensor_6_sensor_3_0
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_4_0
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_5_0
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_6_0
+        - binary_sensor.fibaro_system_fgms001zw5_motion_sensor_sensor_7_0
+      to: 'on'
+
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.last_motion_triggered
+          option: "{{ trigger.to_state.attributes.friendly_name | replace(' Motion', '') }}"
+
+  - alias : Adjust lights based on last_motion_triggered selection.
+
+    trigger:
+      platform: state
+      entity_id: input_select.last_motion_triggered
+
+    action:
+      - service: light.turn_on
+        data_template:
+          entity_id: "group.{{ trigger.to_state.state | lower }}_motion_on"
+
+      - service: light.turn_off
+        data_template:
+          entity_id: >
+              {% if (as_timestamp(now()) - as_timestamp(trigger.from_state.last_updated)) | int > 1 %}
+                  group.{{ trigger.to_state.state | lower }}_motion_off
+              {% else %}
+                  input_boolean.dummy
+              {% endif %}
+          transition: 3
