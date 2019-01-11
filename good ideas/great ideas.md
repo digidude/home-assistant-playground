@@ -10,7 +10,8 @@ https://community.home-assistant.io/t/motion-tracking-lights-lights-on-only-in-o
 
 * Serious YAML Foo
 
-
+Great Visuals...
+https://imgur.com/a/MvtUmwF
 
 Frenck's list of awesome stuff 
 https://github.com/frenck/awesome-home-assistant
