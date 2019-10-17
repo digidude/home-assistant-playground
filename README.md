@@ -29,3 +29,9 @@ Update test from VC Code
 
 Tinkers Config
 https://github.com/DubhAd/Home-AssistantConfig
+
+
+
+Test linking documents
+
+[Helper Server](digitalmanor-helper.md)
