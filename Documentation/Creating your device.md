@@ -2,7 +2,7 @@ Building out your Home Automation Server
 
 Base device
 For a Raspberry Pi
-* Download the lite image
+* Download the raspberrian lite image
 * Burn it onto an sd card
 * Update sd card with location/network specific attributes
 * * Enable SSH  - password or key based auth

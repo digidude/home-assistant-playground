@@ -3,3 +3,21 @@
 .DS_Store
 .DS_Store
 Documentation/.DS_Store
+
+automan-helper-docs/home/Cert Experiment/ca-key\.pem
+
+automan-helper-docs/home/Cert Experiment/ca\.pem
+
+automan-helper-docs/duck\.log
+
+automan-helper-docs/home/\.viminfo
+
+automan-helper-docs/home/Cert Experiment/ca\.srl
+
+automan-helper-docs/home/Cert Experiment/cert\.pem
+
+automan-helper-docs/home/Cert Experiment/key\.pem
+
+automan-helper-docs/home/Cert Experiment/server-cert\.pem
+
+automan-helper-docs/home/Cert Experiment/server-key\.pem
