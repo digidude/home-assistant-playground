@@ -1,7 +1,5 @@
 Following these instructions
 
-
-
 Run this stuff in a single docker container running on a pi
 
 homeassistant
@@ -13,12 +11,10 @@ mqtt-bridge (port: 8080) (remove this one?)
 influxdb (port: 8086)
 graphana (port: 3000) 192.168.99.192:3000
 
-
 organizr (port: 80, 443)
 dockermon (port: 8126)
 
 portainer (port: 9000)
-
 
 see /opt for persistant location of docker files
 
@@ -26,12 +22,7 @@ Built out using a docker-compose
 Fixups needed in the docker compose file
 1) change the ver
 
-
-
 https://www.reddit.com/r/homeassistant/comments/895iw6/my_home_assistant_setup_rpi_3b_docker_compose/
-
-
-
 
 
 How to connect Portainer to a remote docker is a mystery

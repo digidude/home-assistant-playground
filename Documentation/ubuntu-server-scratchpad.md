@@ -6,11 +6,6 @@
 * Update/Harden ... etc.
 * Change the server name and set a fixed IP
 
-
-
-
-
-
 Unbuntu Hardening
 * apt-get update and upgrade
 
