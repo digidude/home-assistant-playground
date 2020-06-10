@@ -5,9 +5,9 @@
 
    TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
-   1. _Definitions._
+   1. **Definitions.**
 
-      _"License"_ shall mean the terms and conditions for use, reproduction, and
+      **"License"** shall mean the terms and conditions for use, reproduction, and
       distribution as defined by Sections 1 through 9 of this document.
 
       "Licensor" shall mean the copyright owner or entity authorized by the
