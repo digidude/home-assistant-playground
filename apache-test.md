@@ -3,7 +3,7 @@
 Apache License
 ==============
 _Version 2.0, January 2004_
-_<http://www.apache.org/licenses/>_
+\<http://www.apache.org/licenses/\>
 
 ### Terms and Conditions for use, reproduction, and distribution
 
@@ -94,18 +94,18 @@ You may reproduce and distribute copies of the Work or Derivative Works
 thereof in any medium, with or without modifications, and in Source or
 Object form, provided that You meet the following conditions:
 
-1. You must give any other recipients of the Work or Derivative Works a copy
+* You must give any other recipients of the Work or Derivative Works a copy
     of this License; and
 
-1. You must cause any modified files to carry prominent notices stating that
+* You must cause any modified files to carry prominent notices stating that
     You changed the files; and
 
-1.  You must retain, in the Source form of any Derivative Works that You
+*  You must retain, in the Source form of any Derivative Works that You
     distribute, all copyright, patent, trademark, and attribution notices from
     the Source form of the Work, excluding those notices that do not pertain
     to any part of the Derivative Works; and
 
-1.  If the Work includes a "NOTICE" text file as part of its distribution,
+*  If the Work includes a "NOTICE" text file as part of its distribution,
     then any Derivative Works that You distribute must include a readable copy
     of the attribution notices contained within such NOTICE file, excluding
     those notices that do not pertain to any part of the Derivative Works, in
