@@ -17,13 +17,13 @@ copyright owner that is granting the License.
 
 "**Legal Entity**” shall mean the union of the acting entity and all other
 entities that control, are controlled by, or are under common control with
-that entity. For the purposes of this definition, “*control*” means (i)
+that entity. For the purposes of this definition, “**control**” means (i)
 the power, direct or indirect, to cause the direction or management of
 such entity, whether by contract or otherwise, or (ii) ownership of fifty
 percent (50%) or more of the outstanding shares, or (iii) beneficial
 ownership of such entity.
 
-"**You**" (or "Your") shall mean an individual or Legal Entity exercising
+"**You**" (or **"Your"**) shall mean an individual or Legal Entity exercising
 permissions granted by this License.
 
 "**Source**" form shall mean the preferred form for making modifications,
@@ -53,14 +53,14 @@ version of the Work and any modifications or additions to that Work or
 Derivative Works thereof, that is intentionally submitted to Licensor
 for inclusion in the Work by the copyright owner or by an individual or
 Legal Entity authorized to submit on behalf of the copyright owner. For
-the purposes of this definition, "submitted" means any form of
+the purposes of this definition, "**submitted**" means any form of
 electronic, verbal, or written communication sent to the Licensor or its
 representatives, including but not limited to communication on
 electronic mailing lists, source code control systems, and issue
 tracking systems that are managed by, or on behalf of, the Licensor for
 the purpose of discussing and improving the Work, but excluding
 communication that is conspicuously marked or otherwise designated in
-writing by the copyright owner as "Not a Contribution."
+writing by the copyright owner as "**Not a Contribution.**"
 
 "**Contributor**" shall mean Licensor and any individual or Legal Entity on
 behalf of whom a Contribution has been received by Licensor and
@@ -105,7 +105,7 @@ Object form, provided that You meet the following conditions:
     the Source form of the Work, excluding those notices that do not pertain
     to any part of the Derivative Works; and
 
-   __(d)__ If the Work includes a "NOTICE" text file as part of its distribution,
+   __(d)__ If the Work includes a **"NOTICE**" text file as part of its distribution,
     then any Derivative Works that You distribute must include a readable copy
     of the attribution notices contained within such NOTICE file, excluding
     those notices that do not pertain to any part of the Derivative Works, in
@@ -120,11 +120,12 @@ Object form, provided that You meet the following conditions:
     that such additional attribution notices cannot be construed as modifying
     the License.
 
-You may add Your own copyright statement to Your modifications and may provide
-additional or different license terms and conditions for use, reproduction, or
-distribution of Your modifications, or for any such Derivative Works as a
-whole, provided Your use, reproduction, and distribution of the Work otherwise
-complies with the conditions stated in this License.
+   You may add Your own copyright statement to Your modifications and may
+   provide additional or different license terms and conditions for use,
+   reproduction, or distribution of Your modifications, or for any such
+   Derivative Works as a whole, provided Your use, reproduction, and
+   distribution of the Work otherwise complies with the conditions stated in
+   this License.
 
 #### 5. Submission of Contributions. 
 Unless You explicitly state otherwise, any Contribution intentionally
